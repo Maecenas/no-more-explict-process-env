@@ -19,17 +19,17 @@ function ProxyFactory(obj) {
     get: (target, key, receiver) => {
       // Concat to the matched name required for env
       // e.g. config.oss.sts.ROLE_ARN -> OSS_STS_ROLE_ARN
-      let envName = [Reflect.get(target, KEY, receiver), key]
+      const envName = [Reflect.get(target, KEY, receiver), key]
         .filter(Boolean)
         .map(_ => _.toString().toUpperCase())
         .join("_");
       // Return the environment variable if there is one
-      let p = process.env[envName];
+      const p = process.env[envName];
       if (p) {
         return p;
       }
       // Get original value/object
-      let o = Reflect.get(target, key, receiver);
+      const o = Reflect.get(target, key, receiver);
       // Return the value/undefined
       if (!isObject(o)) {
         return o;
